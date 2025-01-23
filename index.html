@@ -73,7 +73,7 @@
         return [
           Math.pow(Math.sin(rad), 3),
           -(
-            12 * Math.cos(rad) -
+            15 * Math.cos(rad) -
             5 * Math.cos(2 * rad) -
             2 * Math.cos(3 * rad) -
             Math.cos(4 * rad)
@@ -88,11 +88,11 @@
       var pointsOrigin = [];
       var dr = 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 100, 6, 0, 0)); // Skala lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 100, 5, 0, 0)); // Skala lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 80, 5, 0, 0));
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 80, 4, 0, 0));
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 60, 4, 0, 0));
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 60, 3, 0, 0));
 
       var targetPoints = [];
       var pulse = function (kx, ky) {
