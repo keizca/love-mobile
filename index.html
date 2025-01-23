@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>❤️</title>
   <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Mencegah scroll */
+    }
+
     canvas {
       position: absolute;
       left: 0;
       top: 0;
-      width: 100vw; /* Menggunakan 100% dari lebar viewport */
-      height: 100vh; /* Menggunakan 100% dari tinggi viewport */
+      width: 100vw; /* Lebar penuh layar */
+      height: 100vh; /* Tinggi penuh layar */
       background-color: rgba(0, 0, 0, 0.2);
-      max-width: 100%;
-      max-height: 100%;
     }
   </style>
 </head>
@@ -47,29 +51,33 @@
     var init = function () {
       if (loaded) return;
       loaded = true;
-      var mobile = window.isDevice;
-      var koef = mobile ? 0.1 : 1; // Mengurangi koefisien untuk perangkat mobile
+
+      // Gunakan DPI perangkat untuk skala resolusi
+      var koef = window.devicePixelRatio || 1;
       var canvas = document.getElementById("heart");
       var ctx = canvas.getContext("2d");
-      var width = (canvas.width = koef * innerWidth);
-      var height = (canvas.height = koef * innerHeight);
-      var rand = Math.random;
 
-      ctx.fillStyle = "rgba(0,0,0,1)";
-      ctx.fillRect(0, 0, width, height);
+      var resizeCanvas = function () {
+        canvas.width = koef * innerWidth;
+        canvas.height = koef * innerHeight;
 
-      var drawText = function () {
-        ctx.font = "60px Arial"; 
-        ctx.fillStyle = "lightblue";
-        ctx.textAlign = "center";
-        ctx.fillText("", width / 2, height / 2.2 + 400); 
+        ctx.scale(koef, koef);
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       };
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      var width = canvas.width / koef;
+      var height = canvas.height / koef;
+      var rand = Math.random;
 
       var heartPosition = function (rad) {
         return [
           Math.pow(Math.sin(rad), 3),
           -(
-            6 * Math.cos(rad) -
+            15 * Math.cos(rad) -
             5 * Math.cos(2 * rad) -
             2 * Math.cos(3 * rad) -
             Math.cos(4 * rad)
@@ -81,40 +89,28 @@
         return [dx + pos[0] * sx, dy + pos[1] * sy];
       };
 
-      window.addEventListener("resize", function () {
-        width = canvas.width = koef * innerWidth;
-        height = canvas.height = koef * innerHeight;
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        ctx.fillRect(0, 0, width, height);
-
-        // Mengatur ulang ukuran hati saat resize
-        pulse(0.1, 0.1); // Skala hati lebih kecil lagi
-      });
-
-      var traceCount = mobile ? 10 : 10;
       var pointsOrigin = [];
-      var dr = mobile ? 0.3 : 0.1;
+      var dr = 0.1; // Semakin kecil, semakin halus hati
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 35, 2.5, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 310, 19, 0, 0)); 
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 25, 1.5, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 250, 15, 0, 0)); 
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 20, 1, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 190, 11, 0, 0)); 
 
-      var heartPointsCount = pointsOrigin.length;
       var targetPoints = [];
-
       var pulse = function (kx, ky) {
         for (var i = 0; i < pointsOrigin.length; i++) {
           targetPoints[i] = [
-            kx * pointsOrigin[i][0] + width / 2,
-            ky * pointsOrigin[i][1] + height / 2.2,
+            width / 2 + kx * pointsOrigin[i][0],
+            height / 2.2 + ky * pointsOrigin[i][1],
           ];
         }
       };
 
       var e = [];
-      for (var i = 0; i < heartPointsCount; i++) {
+      var traceCount = 50; // Jumlah jejak partikel
+      for (var i = 0; i < pointsOrigin.length; i++) {
         var x = rand() * width;
         var y = rand() * height;
         e[i] = {
@@ -122,7 +118,7 @@
           vy: 0,
           R: 2,
           speed: rand() + 5,
-          q: ~~(rand() * heartPointsCount),
+          q: ~~(rand() * pointsOrigin.length),
           D: 2 * (i % 2) - 1,
           force: 0.2 * rand() + 0.7,
           f: "rgba(51, 204, 255, 0.7)",
@@ -150,11 +146,11 @@
 
           if (length < 10) {
             if (rand() > 0.95) {
-              u.q = ~~(rand() * heartPointsCount);
+              u.q = ~~(rand() * pointsOrigin.length);
             } else {
               if (rand() > 0.99) u.D *= -1;
-              u.q = (u.q + u.D) % heartPointsCount;
-              if (u.q < 0) u.q += heartPointsCount;
+              u.q = (u.q + u.D) % pointsOrigin.length;
+              if (u.q < 0) u.q += pointsOrigin.length;
             }
           }
 
@@ -176,15 +172,13 @@
           u.trace.forEach((t) => ctx.fillRect(t.x, t.y, 1, 1));
         }
 
-        drawText();
         window.requestAnimationFrame(loop, canvas);
       };
 
       loop();
     };
 
-    var s = document.readyState;
-    if (s === "complete" || s === "loaded" || s === "interactive") init();
+    if (document.readyState !== "loading") init();
     else document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
