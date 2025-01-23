@@ -46,7 +46,7 @@
       if (loaded) return;
       loaded = true;
       var mobile = window.isDevice;
-      var koef = mobile ? 0.5 : 1;
+      var koef = mobile ? 0.3 : 1; // Koefisien untuk perangkat mobile lebih kecil
       var canvas = document.getElementById("heart");
       var ctx = canvas.getContext("2d");
       var width = (canvas.width = koef * innerWidth);
@@ -90,11 +90,11 @@
       var pointsOrigin = [];
       var dr = mobile ? 0.3 : 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 190, 16, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 120, 10, 0, 0)); // Ukuran hati diubah lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 170, 12, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 100, 8, 0, 0)); // Ukuran hati diubah lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 130, 8, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 80, 6, 0, 0));  // Ukuran hati diubah lebih kecil
 
       var heartPointsCount = pointsOrigin.length;
       var targetPoints = [];
