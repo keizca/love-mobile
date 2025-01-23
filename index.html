@@ -29,11 +29,11 @@
         setTimeout(callback, 1000 / 60);
       };
 
-    var init = function () {
-      var canvas = document.getElementById("heart");
-      var ctx = canvas.getContext("2d");
+    const init = () => {
+      const canvas = document.getElementById("heart");
+      const ctx = canvas.getContext("2d");
 
-      // Responsif: Gunakan devicePixelRatio untuk kanvas tajam
+      // Gunakan devicePixelRatio agar kanvas lebih tajam
       const ratio = window.devicePixelRatio || 1;
       canvas.width = innerWidth * ratio;
       canvas.height = innerHeight * ratio;
@@ -41,51 +41,49 @@
       canvas.style.height = innerHeight + "px";
       ctx.scale(ratio, ratio);
 
-      var width = innerWidth;
-      var height = innerHeight;
-      var rand = Math.random;
+      const width = innerWidth;
+      const height = innerHeight;
 
       ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.fillRect(0, 0, width, height);
 
-      var heartPosition = function (rad) {
-        return [
-          Math.pow(Math.sin(rad), 3),
-          -(
-            15 * Math.cos(rad) -
-            5 * Math.cos(2 * rad) -
-            2 * Math.cos(3 * rad) -
-            Math.cos(4 * rad)
-          ),
-        ];
-      };
+      const heartPosition = (rad) => [
+        Math.pow(Math.sin(rad), 3),
+        -(
+          15 * Math.cos(rad) -
+          5 * Math.cos(2 * rad) -
+          2 * Math.cos(3 * rad) -
+          Math.cos(4 * rad)
+        ),
+      ];
 
-      var scaleAndTranslate = function (pos, sx, sy, dx, dy) {
-        return [dx + pos[0] * sx, dy + pos[1] * sy];
-      };
+      const scaleAndTranslate = (pos, sx, sy, dx, dy) => [
+        dx + pos[0] * sx,
+        dy + pos[1] * sy,
+      ];
 
-      window.addEventListener("resize", function () {
+      window.addEventListener("resize", () => {
         canvas.width = innerWidth * ratio;
         canvas.height = innerHeight * ratio;
         canvas.style.width = innerWidth + "px";
         canvas.style.height = innerHeight + "px";
         ctx.scale(ratio, ratio);
 
-        width = innerWidth;
-        height = innerHeight;
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fillRect(0, 0, width, height);
       });
 
-      var pointsOrigin = [];
-      var dr = 0.1;
-      for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), width / 5, height / 15, 0, 0));
-      var heartPointsCount = pointsOrigin.length;
-      var targetPoints = [];
+      const pointsOrigin = [];
+      const scale = Math.min(width, height) / 30; // Skala proporsional agar hati tetap terlihat bagus
+      const dr = 0.1;
+      for (let i = 0; i < Math.PI * 2; i += dr) {
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), scale, scale, 0, 0));
+      }
+      const heartPointsCount = pointsOrigin.length;
+      const targetPoints = [];
 
-      var pulse = function (kx, ky) {
-        for (var i = 0; i < pointsOrigin.length; i++) {
+      const pulse = (kx, ky) => {
+        for (let i = 0; i < pointsOrigin.length; i++) {
           targetPoints[i] = [
             kx * pointsOrigin[i][0] + width / 2,
             ky * pointsOrigin[i][1] + height / 2.2,
@@ -93,42 +91,42 @@
         }
       };
 
-      var e = [];
-      for (var i = 0; i < heartPointsCount; i++) {
-        var x = rand() * width;
-        var y = rand() * height;
+      const e = [];
+      for (let i = 0; i < heartPointsCount; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
         e[i] = {
           vx: 0,
           vy: 0,
-          speed: rand() + 2,
-          q: ~~(rand() * heartPointsCount),
+          speed: Math.random() + 2,
+          q: ~~(Math.random() * heartPointsCount),
           D: 2 * (i % 2) - 1,
-          force: 0.2 * rand() + 0.8,
-          f: "rgba(51, 204, 255, 0.7)",
+          force: 0.2 * Math.random() + 0.8,
+          f: "rgba(255, 0, 0, 0.7)",
           trace: Array.from({ length: 20 }, () => ({ x, y })),
         };
       }
 
-      var config = { traceK: 0.4, timeDelta: 0.6 };
-      var time = 0;
+      const config = { traceK: 0.4, timeDelta: 0.6 };
+      let time = 0;
 
-      var loop = function () {
-        var n = -Math.cos(time);
+      const loop = () => {
+        const n = -Math.cos(time);
         pulse((1 + n) * 0.5, (1 + n) * 0.5);
         time += config.timeDelta;
 
         ctx.fillStyle = "rgba(0,0,0,.1)";
         ctx.fillRect(0, 0, width, height);
 
-        for (var i = e.length; i--; ) {
-          var u = e[i];
-          var q = targetPoints[u.q];
-          var dx = u.trace[0].x - q[0];
-          var dy = u.trace[0].y - q[1];
-          var length = Math.sqrt(dx * dx + dy * dy);
+        for (let i = e.length; i--; ) {
+          const u = e[i];
+          const q = targetPoints[u.q];
+          const dx = u.trace[0].x - q[0];
+          const dy = u.trace[0].y - q[1];
+          const length = Math.sqrt(dx * dx + dy * dy);
 
           if (length < 10) {
-            u.q = ~~(rand() * heartPointsCount);
+            u.q = ~~(Math.random() * heartPointsCount);
           }
 
           u.vx += (-dx / length) * u.speed;
@@ -138,9 +136,9 @@
           u.vx *= u.force;
           u.vy *= u.force;
 
-          for (var k = 0; k < u.trace.length - 1; k++) {
-            var T = u.trace[k];
-            var N = u.trace[k + 1];
+          for (let k = 0; k < u.trace.length - 1; k++) {
+            const T = u.trace[k];
+            const N = u.trace[k + 1];
             N.x -= config.traceK * (N.x - T.x);
             N.y -= config.traceK * (N.y - T.y);
           }
