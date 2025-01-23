@@ -91,15 +91,15 @@
         pulse(0.1, 0.1); // Skala hati lebih kecil lagi
       });
 
-      var traceCount = mobile ? 20 : 50;
+      var traceCount = mobile ? 10 : 10;
       var pointsOrigin = [];
       var dr = mobile ? 0.3 : 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 70, 5, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 35, 2.5, 0, 0)); // Ukuran lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 50, 3, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 25, 1.5, 0, 0)); // Ukuran lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 40, 2, 0, 0)); // Ukuran lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 20, 1, 0, 0)); // Ukuran lebih kecil
 
       var heartPointsCount = pointsOrigin.length;
       var targetPoints = [];
