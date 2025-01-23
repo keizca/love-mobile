@@ -18,7 +18,7 @@
       top: 0;
       width: 100vw; /* Lebar penuh layar */
       height: 100vh; /* Tinggi penuh layar */
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.2); /* Latar belakang transparan */
     }
   </style>
 </head>
@@ -58,7 +58,7 @@
         canvas.height = innerHeight * koef;
 
         ctx.scale(koef, koef);
-        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillStyle = "rgba(0,0,0,0.2)"; // Background transparan
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       };
 
@@ -117,7 +117,7 @@
           q: ~~(rand() * pointsOrigin.length),
           D: 2 * (i % 2) - 1,
           force: 0.2 * rand() + 0.7,
-          f: "rgba(51, 204, 255, 0.7)",
+          f: "rgba(255, 0, 0, 0.5)", // Warna bintik
           trace: Array.from({ length: traceCount }, () => ({ x, y })),
         };
       }
@@ -130,7 +130,8 @@
         pulse((1 + n) * 0.5, (1 + n) * 0.5);
         time += (Math.sin(time) < 0 ? 9 : n > 0.8 ? 0.2 : 1) * config.timeDelta;
 
-        ctx.fillStyle = "rgba(0,0,0,.1)";
+        // Menghapus jejak transparansi dengan menghapus fillRect latar belakang
+        ctx.fillStyle = "rgba(0,0,0,0.2)"; // Transparansi latar belakang
         ctx.fillRect(0, 0, width, height);
 
         for (var i = e.length; i--; ) {
