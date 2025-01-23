@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>❤️</title>
   <style>
     canvas {
       position: absolute;
       left: 0;
       top: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw; /* Menggunakan 100% dari lebar viewport */
+      height: 100vh; /* Menggunakan 100% dari tinggi viewport */
       background-color: rgba(0, 0, 0, 0.2);
+      max-width: 100%;
+      max-height: 100%;
     }
   </style>
 </head>
@@ -46,7 +48,7 @@
       if (loaded) return;
       loaded = true;
       var mobile = window.isDevice;
-      var koef = mobile ? 0.2 : 1; // Menurunkan skala untuk mobile
+      var koef = mobile ? 0.1 : 1; // Mengurangi koefisien untuk perangkat mobile
       var canvas = document.getElementById("heart");
       var ctx = canvas.getContext("2d");
       var width = (canvas.width = koef * innerWidth);
@@ -84,17 +86,20 @@
         height = canvas.height = koef * innerHeight;
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fillRect(0, 0, width, height);
+
+        // Mengatur ulang ukuran hati saat resize
+        pulse(0.1, 0.1); // Skala hati lebih kecil lagi
       });
 
       var traceCount = mobile ? 20 : 50;
       var pointsOrigin = [];
       var dr = mobile ? 0.3 : 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 100, 8, 0, 0)); // Ukuran hati lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 70, 5, 0, 0)); // Ukuran lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 80, 6, 0, 0));  // Ukuran hati lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 50, 3, 0, 0)); // Ukuran lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 60, 4, 0, 0));   // Ukuran hati lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 40, 2, 0, 0)); // Ukuran lebih kecil
 
       var heartPointsCount = pointsOrigin.length;
       var targetPoints = [];
