@@ -52,14 +52,14 @@
       if (loaded) return;
       loaded = true;
 
-      // Gunakan DPI perangkat untuk skala resolusi
-      var koef = window.devicePixelRatio || 1;
+      // Koefisien skala untuk layar kecil
+      var koef = window.isDevice ? 0.6 : 1;
       var canvas = document.getElementById("heart");
       var ctx = canvas.getContext("2d");
 
       var resizeCanvas = function () {
-        canvas.width = koef * innerWidth;
-        canvas.height = koef * innerHeight;
+        canvas.width = innerWidth * koef;
+        canvas.height = innerHeight * koef;
 
         ctx.scale(koef, koef);
         ctx.fillStyle = "rgba(0,0,0,1)";
@@ -90,13 +90,13 @@
       };
 
       var pointsOrigin = [];
-      var dr = 0.1; // Semakin kecil, semakin halus hati
+      var dr = 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 310, 19, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0)); // Skala lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 250, 15, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 120, 7, 0, 0));
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 190, 11, 0, 0)); 
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, 0, 0));
 
       var targetPoints = [];
       var pulse = function (kx, ky) {
@@ -109,7 +109,7 @@
       };
 
       var e = [];
-      var traceCount = 50; // Jumlah jejak partikel
+      var traceCount = 50;
       for (var i = 0; i < pointsOrigin.length; i++) {
         var x = rand() * width;
         var y = rand() * height;
