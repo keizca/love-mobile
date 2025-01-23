@@ -42,18 +42,14 @@
         };
       })();
 
-    window.isDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-      (navigator.userAgent || navigator.vendor || window.opera).toLowerCase()
-    );
-
     var loaded = false;
 
     var init = function () {
       if (loaded) return;
       loaded = true;
 
-      // Koefisien skala untuk layar kecil
-      var koef = window.isDevice ? 0.6 : 1;
+      // Koefisien skala lebih kecil untuk layar kecil
+      var koef = window.innerWidth < 768 ? 0.4 : 0.8;
       var canvas = document.getElementById("heart");
       var ctx = canvas.getContext("2d");
 
@@ -92,11 +88,11 @@
       var pointsOrigin = [];
       var dr = 0.1;
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0)); // Skala lebih kecil
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 100, 6, 0, 0)); // Skala lebih kecil
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 120, 7, 0, 0));
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 80, 5, 0, 0));
       for (var i = 0; i < Math.PI * 2; i += dr)
-        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, 0, 0));
+        pointsOrigin.push(scaleAndTranslate(heartPosition(i), 60, 4, 0, 0));
 
       var targetPoints = [];
       var pulse = function (kx, ky) {
